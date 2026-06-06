@@ -8,7 +8,7 @@ A fixed-price (EUR 850) New Relic monitoring package for small SaaS teams withou
 
 ## Sales page
 
-Single-page site at `public/index.html` -- plain HTML, zero dependencies, system fonts only. Served via nginx behind Traefik at `danielpetrica.com/newrelic`.
+Single-page site at `public/index.html` -- plain HTML, zero dependencies, system fonts only. Served via Apache behind Traefik at `danielpetrica.com/newrelic`.
 
 ## Files
 
@@ -20,7 +20,7 @@ Single-page site at `public/index.html` -- plain HTML, zero dependencies, system
 | `public/apple-touch-icon.png` | Apple Touch Icon |
 | `public/images/daniel-petrica.jpg` | Author photo |
 | `compose.yaml` | Docker Compose deployment config |
-| `nginx.conf` | nginx config (root-based, SPA fallback) |
+| `httpd.conf` | Apache config (SPA fallback via mod_rewrite) |
 
 ## Deployment
 
@@ -36,7 +36,7 @@ To update:
 git pull && docker compose up -d --force-recreate
 ```
 
-The nginx container serves from `public/` and is exposed via Traefik at `PathPrefix(/newrelic)`.
+The Apache container serves from `public/` and is exposed via Traefik at `PathPrefix(/newrelic)`.
 
 ## Integrations
 

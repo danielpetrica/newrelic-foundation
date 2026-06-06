@@ -1,10 +1,10 @@
 services:
   newrelic-page:
     container_name: danielpetrica_newrelic
-    image: nginx:alpine
+    image: httpd:alpine
     volumes:
-      - ./public/:/usr/share/nginx/html/newrelic:ro
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./public/:/usr/local/apache2/htdocs/newrelic:ro
+      - ./httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
     labels:
       - traefik.enable=true
       # --- HTTPS router ---
