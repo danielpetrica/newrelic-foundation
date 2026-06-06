@@ -4,40 +4,41 @@ Productized New Relic monitoring setup for SaaS teams. One price, one week deliv
 
 ## What it is
 
-A fixed-price (€850) New Relic monitoring package for small SaaS teams without dedicated DevOps. Full-stack setup: APM, host, browser, Docker, synthetics, alerts, and The Foundation Kit — a documented runbook of everything configured.
+A fixed-price (EUR 850) New Relic monitoring package for small SaaS teams without dedicated DevOps. Full-stack setup: APM, host, browser, Docker, synthetics, alerts, and The Foundation Kit -- a documented runbook of everything configured.
 
 ## Sales page
 
-The single-page sales site at `index.html` — plain HTML, zero dependencies, system fonts only. Served via nginx behind Traefik at `danielpetrica.com/newrelic`.
+Single-page site at `public/index.html` -- plain HTML, zero dependencies, system fonts only. Served via nginx behind Traefik at `danielpetrica.com/newrelic`.
 
 ## Files
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Sales page |
-| `PLAN.md` | Full planning document |
-| `DESIGN-SPEC.md` | Original design specification |
-| `og-image.jpg` | Open Graph / social media share image |
-| `favicon.ico` / `favicon-32.png` | Browser favicons |
-| `apple-touch-icon.png` | Apple Touch Icon |
-| `images/daniel-petrica.jpg` | Author photo |
+| `public/index.html` | Sales page |
+| `public/og-image.jpg` | Open Graph / social media share image |
+| `public/favicon.ico` / `public/favicon-32.png` | Browser favicons |
+| `public/apple-touch-icon.png` | Apple Touch Icon |
+| `public/images/daniel-petrica.jpg` | Author photo |
+| `compose.yaml` | Docker Compose deployment config |
+| `nginx.conf` | nginx config (root-based, SPA fallback) |
 
 ## Deployment
 
-Static files served by nginx:alpine. Add to your Traefik docker-compose stack:
-
-```yaml
-newrelic-page:
-  image: nginx:alpine
-  volumes:
-    - ./newrelic-foundation:/usr/share/nginx/html:ro
-  labels:
-    - "traefik.enable=true"
-    - "traefik.http.routers.newrelic.rule=Host(`danielpetrica.com`) && PathPrefix(`/newrelic`)"
-    - "traefik.http.services.newrelic.loadbalancer.server.port=80"
+```bash
+git clone git@github.com:danielpetrica/newrelic-foundation.git
+cd newrelic-foundation
+docker compose up -d
 ```
+
+To update:
+
+```bash
+git pull && docker compose up -d --force-recreate
+```
+
+The nginx container serves from `public/` and is exposed via Traefik at `PathPrefix(/newrelic)`.
 
 ## Integrations
 
-- **Stripe** — payment link for checkout
-- **Mailcoach** — email capture for freebie PDF ("5 New Relic Alerts Every SaaS Should Have")
+- **Stripe** -- payment link for checkout
+- **Mailcoach** -- email capture for freebie PDF ("5 New Relic Alerts Every SaaS Should Have")
