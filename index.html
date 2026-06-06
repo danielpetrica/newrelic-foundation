@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<title>New Relic Monitoring Setup for SaaS Teams — Fixed Price, One Week | Daniel Petrica</title>
+<meta name="description" content="Full-stack New Relic monitoring configured for your SaaS in one week. APM, host, browser, Docker, synthetics, and alerting — one price, €850. By Daniel Petrica, New Relic specialist since 2023.">
+<meta name="keywords" content="New Relic monitoring, New Relic setup, New Relic consultant, New Relic APM, Laravel monitoring, SaaS monitoring, production monitoring, DevOps consultant, New Relic configuration, observability">
+<meta name="author" content="Daniel Petrica">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://danielpetrica.com/newrelic">
+
+<!-- Open Graph -->
+<meta property="og:title" content="New Relic Monitoring Setup for SaaS Teams — Fixed Price, One Week">
+<meta property="og:description" content="Full-stack New Relic monitoring configured for your SaaS in one week. APM, host, browser, Docker, synthetics, alerting — €850, one price.">
+<meta property="og:image" content="https://danielpetrica.com/newrelic/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://danielpetrica.com/newrelic">
+<meta property="og:site_name" content="Daniel Petrica">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="New Relic Monitoring Setup — Fixed Price, One Week">
+<meta name="twitter:description" content="Full-stack New Relic monitoring for your SaaS. APM, host, browser, Docker, synthetics, alerting. €850, one price. By Daniel Petrica.">
+<meta name="twitter:image" content="https://danielpetrica.com/newrelic/og-image.jpg">
+
+<!-- Structured Data: Service -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Full-Stack New Relic Monitoring Setup",
+  "provider": {
+    "@type": "Person",
+    "name": "Daniel Petrica",
+    "url": "https://danielpetrica.com",
+    "description": "DevOps Specialist & New Relic Expert"
+  },
+  "description": "Full-stack New Relic monitoring configured for SaaS applications in one week. Includes APM, host monitoring, browser monitoring, Docker monitoring, synthetic checks, alert policies, and a documented Foundation Kit.",
+  "offers": {
+    "@type": "Offer",
+    "price": "850.00",
+    "priceCurrency": "EUR",
+    "description": "One-time setup package for a single application"
+  },
+  "areaServed": "Worldwide",
+  "termsOfService": "one week delivery from SSH access confirmed. 14-day tuning window included.",
+  "audience": {
+    "@type": "BusinessAudience",
+    "audienceType": "SaaS teams and software companies"
+  }
+}
+</script>
+<style>
+/* ── Modern Reset & Base Variables ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fcfbf9;            /* Editorial warm stone background */
+  --text: #1c1917;          /* Rich dark charcoal (stone-900) */
+  --text-muted: #78716c;    /* Readable gray (stone-500) */
+  --accent: #0f766e;        /* Deep, trustworthy New Relic teal */
+  --accent-light: #f0fdfa;  /* Light teal accent background */
+  --accent-hover: #115e59;  /* Darker teal for interaction state */
+  --border: #e7e5e4;        /* Soft stone borders */
+  --card-bg: #ffffff;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.625;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 5rem 0;
+}
+
+section { margin-bottom: 5rem; }
+
+p {
+  margin-bottom: 1.25rem;
+  color: #292524;
+}
+
+/* ── Typography & Links ── */
+h1, h2, h3 {
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+/* Inline code pills */
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+  background: #f5f4f0;
+  color: #1c1917;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* ── Hero Section ── */
+.hero {
+  padding-top: 7rem;
+  margin-bottom: 5rem;
+}
+.hero h1 {
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+}
+.hero-subhead {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: #44403c;
+  margin-bottom: 2rem;
+}
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 0.5rem;
+  align-items: center;
+}
+.trust-badge {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  background: #f5f4f0;
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+}
+.trust-badge a {
+  text-decoration: none;
+  color: var(--text-muted);
+}
+.trust-badge a:hover {
+  color: var(--accent);
+}
+.trust-sep {
+  color: var(--border);
+  font-size: 0.75rem;
+}
+
+/* ── Custom SVG List Layouts (Features) ── */
+.feature-group {
+  margin-bottom: 2rem;
+}
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.feature-icon {
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.feature strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ── Foundation Process Phases ── */
+.phases {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.phase {
+  display: flex;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  gap: 1rem;
+  box-shadow: var(--shadow);
+}
+.phase-num {
+  font-family: ui-monospace, monospace;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-light);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.phase-content {
+  display: flex;
+  flex-direction: column;
+}
+.phase-name {
+  font-weight: 700;
+  font-size: 1.0625rem;
+  margin-bottom: 0.25rem;
+}
+.phase-desc {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+/* ── Options Block ── */
+.option {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin: 1rem 0;
+  box-shadow: var(--shadow);
+}
+.option .opt-label {
+  display: block;
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+  color: var(--accent);
+}
+
+/* ── Refined Pricing Block ── */
+.pricing-card {
+  background: #f0fdfa; /* Soft teal glow */
+  border: 2px solid var(--accent);
+  border-radius: var(--radius-md);
+  padding: 2.5rem 2rem;
+  margin: 3rem 0;
+  box-shadow: 0 4px 20px -2px rgba(15, 118, 110, 0.08);
+}
+.price-tag {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+.price {
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+}
+.price-euro {
+  font-size: 2.5rem;
+  font-weight: 700;
+  align-self: flex-start;
+  margin-right: 0.125rem;
+}
+.price-sub {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.price-note {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+/* ── Author photo ── */
+.author-photo {
+  float: left;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0.25rem 1.5rem 1rem 0;
+  filter: saturate(30%);
+  transition: filter 0.3s ease;
+}
+.author-photo:hover {
+  filter: saturate(100%);
+}
+.author-intro {
+  overflow: hidden;
+}
+
+/* ── Pull Quotes ── */
+blockquote {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  margin: 2.5rem 0;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+blockquote .stars {
+  color: #f59e0b; /* Bright amber stars */
+  font-size: 0.9375rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+blockquote .stars span {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin-left: 0.375rem;
+  font-weight: 600;
+}
+blockquote p {
+  font-style: italic;
+  font-size: 1.125rem;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+blockquote footer {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ── Interactive FAQs ── */
+details {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease;
+}
+details[open] {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px -2px rgba(15, 118, 110, 0.05);
+}
+details summary {
+  padding: 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  outline: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details summary::marker { display: none; }
+
+/* Elegant Custom Arrow Indicator */
+details summary::after {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%2378716c' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: transform 0.2s ease;
+}
+details[open] summary::after {
+  transform: rotate(180deg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%230f766e' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E");
+}
+details .answer {
+  padding: 0 1.25rem 1.25rem 1.25rem;
+  font-size: 0.975rem;
+  color: #44403c;
+  border-top: 1px dashed var(--border);
+  padding-top: 1rem;
+}
+
+/* ── Inline Form ── */
+.inline-form {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.5rem 0 1rem;
+}
+.inline-form input[type="email"] {
+  flex: 1;
+  height: 3.125rem;
+  border: 1px solid var(--border);
+  padding: 0 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  outline: none;
+  box-shadow: var(--shadow);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.inline-form input[type="email"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+}
+.inline-form button {
+  height: 3.125rem;
+  padding: 0 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+.inline-form button:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.form-note {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* ── Pre-qualification Toggles ── */
+.prequal {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+}
+.prequal-q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.prequal-q:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.prequal-q .q-text {
+  font-weight: 600;
+  flex: 1;
+  padding-right: 1.5rem;
+}
+.prequal-q .q-btns {
+  display: flex;
+  gap: 0.25rem;
+  background: #f5f4f0;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+.prequal-q input[type="radio"] { display: none; }
+.prequal-q label {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  user-select: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+.prequal-q input[type="radio"]:checked + label[data-val="yes"] {
+  background: var(--accent);
+  color: #fff;
+}
+.prequal-q input[type="radio"]:checked + label[data-val="no"] {
+  background: #ef4444; /* Alert red for disqualify */
+  color: #fff;
+}
+.disqualify-msg {
+  font-size: 0.875rem;
+  color: #b91c1c;
+  background: #fef2f2;
+  border-left: 3px solid #ef4444;
+  padding: 0.75rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-top: -0.5rem;
+  margin-bottom: 1.25rem;
+  display: none;
+}
+.data-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+.data-notice span:first-child {
+  color: #d97706;
+}
+
+/* ── Stripe Buy Button ── */
+.buy-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1.125rem;
+  font-weight: 700;
+  padding: 1rem 2.5rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+.buy-btn:hover {
+  background: var(--accent-hover);
+  text-decoration: none;
+  color: #fff;
+}
+
+/* ── Stripe Placeholder Framework ── */
+#stripe-embed {
+  display: none;
+  background: var(--card-bg);
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius-md);
+  padding: 2.5rem;
+  text-align: center;
+  margin: 1.5rem 0;
+  transition: all 0.3s ease;
+}
+#stripe-embed.visible { display: block; }
+.stripe-reassurance {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* ─── Mobile Responsiveness ─── */
+@media (max-width: 640px) {
+  body { font-size: 1rem; }
+  .container { padding: 0 1.25rem; }
+  .hero { padding-top: 4rem; margin-bottom: 3rem; }
+  .hero h1 { font-size: 2rem; }
+  .hero-subhead { font-size: 1.125rem; }
+  .price { font-size: 3rem; }
+  .price-euro { font-size: 2rem; }
+  .prequal-q { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .prequal-q .q-btns { width: 100%; justify-content: stretch; }
+  .prequal-q .q-btns label { flex: 1; text-align: center; }
+  .inline-form { flex-direction: column; }
+  .inline-form button { width: 100%; }
+  section { margin-bottom: 3.5rem; }
+  hr { margin: 3.5rem 0; }
+  blockquote { padding: 1.5rem; }
+  details summary { padding: 1rem; }
+  details .answer { padding: 0 1rem 1rem 1rem; }
+  .author-photo { float: none; display: block; margin: 0 auto 1.25rem; width: 100px; height: 100px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══════════════ 1. HERO ═══════════════ -->
+<section class="hero">
+  <h1>You hear about production outages from your customers.</h1>
+  <p class="hero-subhead">The monitoring setup your SaaS should have shipped with. Delivered in one week — from the moment you provide access.</p>
+  <div class="hero-trust">
+    <div class="trust-badge"><a href="#testimonials">5.0 ★ on Upwork</a></div>
+    <div class="trust-badge">ISO 27001 experience</div>
+    <div class="trust-badge">one week delivery</div>
+  </div>
+</section>
+
+<hr>
+
+<!-- ═══════════════ 2. THE PROBLEM ═══════════════ -->
+<section>
+  <h2>Nobody owns monitoring.</h2>
+  <p>Most small SaaS teams ship their app, set up a basic health check, and move on. Monitoring falls into a gap between developers (who assume ops handles it) and founders (who assume the dev team has it covered). Nobody owns it, so nobody maintains it.</p>
+  <p>When something breaks, you find out from a customer. By then, they've already refreshed the page six times and started questioning your reliability. Your team scrambles through server logs while the outage compounds — lost signups, churned trials, angry messages in the support inbox.</p>
+  <p>This isn't a hypothetical. Almost every team I've worked with was in exactly this position before hiring me. They had the tools. They just didn't have the setup.</p>
+</section>
+
+<!-- ═══════════════ 3. THE COST OF NOTHING ═══════════════ -->
+<section>
+  <h2>Downtime costs more than €850.</h2>
+  <p>One hour of downtime for a SaaS product with paying customers — between lost revenue, support overhead, team distraction, and reputational damage — costs more than this entire package. And that's conservative: if you're processing transactions, the number climbs fast.</p>
+  <p><strong>Cheaper than one hour of downtime.</strong> That's the frame. Not "an investment in observability." Not "proactive monitoring helps you sleep better." Just arithmetic.</p>
+</section>
+
+<!-- ═══════════════ 4. THE SOLUTION ═══════════════ -->
+<section>
+  <h2>Full monitoring. one week. One price.</h2>
+  <p>I configure <code>APM</code> agents for your stack, set up host and browser monitoring, wire up <code>Docker</code> metrics, configure synthetic checks, and build alert policies with thresholds tuned to your traffic patterns — not generic defaults. You get a fully instrumented New Relic account and The Foundation Kit: a documented runbook of everything configured, so any future hire can pick it up without reverse-engineering anything.</p>
+
+  <div class="phases">
+    <div class="phase">
+      <span class="phase-num">1</span>
+      <div class="phase-content">
+        <span class="phase-name">Instrument</span>
+        <span class="phase-desc">Agents deployed across your stack</span>
+      </div>
+    </div>
+    <div class="phase">
+      <span class="phase-num">2</span>
+      <div class="phase-content">
+        <span class="phase-name">Baseline</span>
+        <span class="phase-desc">72 hours of traffic before we tune anything</span>
+      </div>
+    </div>
+    <div class="phase">
+      <span class="phase-num">3</span>
+      <div class="phase-content">
+        <span class="phase-name">Alert</span>
+        <span class="phase-desc">Thresholds set to your patterns, not generic defaults</span>
+      </div>
+    </div>
+    <div class="phase">
+      <span class="phase-num">4</span>
+      <div class="phase-content">
+        <span class="phase-name">Handoff</span>
+        <span class="phase-desc">The Foundation Kit: dashboard suite, alert playbook, runbook</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 5. WHAT'S INCLUDED ═══════════════ -->
+<section>
+  <h2>Everything in the package.</h2>
+
+  <div class="feature-group">
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong><code>APM</code> agent configuration</strong> – <code>PHP</code> (Laravel) or <code>Node.js</code>, tuned to your framework</div>
+    </div>
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong>Host monitoring</strong> – Linux host metrics: CPU, memory, disk, network</div>
+    </div>
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong>Browser monitoring</strong> – script provided for your frontend dev to drop in</div>
+    </div>
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong><code>Docker</code> monitoring</strong> – container-level visibility (or direct-on-machine, both supported)</div>
+    </div>
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong>Synthetics</strong> – ping checks, full page load, <code>SSL</code> certificate monitoring</div>
+    </div>
+  </div>
+
+  <div class="feature-group">
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong>Alert policies</strong> – conditions scoped to what matters for your app</div>
+    </div>
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong>Alert delivery</strong> – email and Slack channels configured</div>
+    </div>
+  </div>
+
+  <div class="feature-group">
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong>Web server visibility</strong> – <code>Apache</code>, <code>Nginx</code>, or <code>Traefik</code> dashboards</div>
+    </div>
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong><code>MySQL</code> monitoring</strong> – query performance, connections, slow queries</div>
+    </div>
+  </div>
+
+  <div class="feature-group">
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong>System logs</strong> – included</div>
+    </div>
+    <div class="feature">
+      <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+      <div><strong>App logs</strong> – included for standard frameworks (Laravel Monolog, Node Winston/Bunyan)</div>
+    </div>
+  </div>
+
+  <div class="feature">
+    <svg class="feature-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+    <div><strong>The Foundation Kit</strong> – a documented runbook of everything configured. Every alert, every threshold, every decision. You're never locked in.</div>
+  </div>
+</section>
+
+<!-- ═══════════════ 6. WHAT HAPPENS AFTER ═══════════════ -->
+<section>
+  <h2>After delivery.</h2>
+  <p>Once the setup is complete, you get a 14-day tuning window — included, not an add-on. Wrong threshold? Too many alerts? We adjust. This is part of the package, not an upsell.</p>
+
+  <p>After that, you have two optional paths:</p>
+  <div class="option">
+    <span class="opt-label">Tuning pass</span>
+    <p style="margin: 0;">2 hours of tuning over 2 weeks — €200. Signals premium rate, not discount labor.</p>
+  </div>
+  <div class="option">
+    <span class="opt-label">Monthly retainer</span>
+    <p style="margin: 0;">€250/mo. Includes monthly review + up to 2 threshold adjustments per month. Additional work at standard rate (€65/hr). You never touch New Relic again.</p>
+  </div>
+
+  <p style="margin-top: 1.5rem;"><strong>Zero commitment beyond the initial setup.</strong></p>
+</section>
+
+<hr>
+
+<!-- ═══════════════ 7. PRICING ═══════════════ -->
+<section>
+  <div class="pricing-card">
+    <div class="price-tag">
+      <span class="price-euro">€</span>
+      <span class="price">850</span>
+    </div>
+    <p class="price-sub">Everything included. Docker, synthetics, alerting, the Foundation Kit.</p>
+    <p class="price-note">Payment plan: €425 now, €425 on delivery. Same scope, no catch.</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- ═══════════════ 8. WHO I AM ═══════════════ -->
+<section>
+  <h2>Who you're hiring.</h2>
+
+  <img class="author-photo" src="./images/daniel-petrica.jpg" alt="Daniel Petrica — New Relic specialist" width="240" height="240" loading="lazy">
+  <!-- Replace src with your actual photo path. Suggested filename: daniel-petrica.jpg -->
+
+  <div class="author-intro">
+  <p>I'm a senior full-stack developer with 8 years of experience — PHP, Laravel, Node.js, Vue.js, Docker. I've been configuring New Relic since 2023 for SaaS companies, security firms, and my own production systems. That combination — someone who writes production code AND instruments it — means I spot things in your APM data that pure ops consultants miss. I know what a slow Eloquent query looks like under load because I've written them. I've evaluated multiple monitoring platforms (OpenObserve, Nightwatch) before standardizing on New Relic.</p>
+
+  <p>I contributed to <strong>ISO 27001 certification at Warrant Hub S.p.A.</strong> as a code and observability advisor, and was responsible for their New Relic monitoring implementation. This means I understand monitoring through a compliance lens — what needs to be logged, what needs to be alerted on, and how to document it so an auditor can verify it without asking you 40 questions.</p>
+
+  <p>I run this exact setup myself. My own production systems use the same agent configuration, the same alert structure, the same Foundation Kit format. I don't sell anything I don't personally use and maintain.</p>
+  </div>
+
+  <blockquote id="testimonials">
+    <div class="stars">★★★★★ <span>5.0 rating</span></div>
+    <p>&ldquo;We hired Andrei to set up New Relic on our website. Not only did he perfectly set up New Relic on our website, but he also helped us understand the platform and the different alerts we received. One thing we really appreciated from Andrei is that he was always quick to respond to any questions we had. I highly recommend Andrei to anyone looking for a New Relic expert with excellent communication skills.&rdquo;</p>
+    <footer>— Gabriel B., COO, Jun 2023 · <a href="https://www.upwork.com/freelancers/andreidanielp" target="_blank" rel="noopener">Upwork verified</a></footer>
+  </blockquote>
+
+  <blockquote>
+    <div class="stars">★★★★★ <span>5.0 rating</span></div>
+    <p>&ldquo;Working with Andrei is a fantastic experience. He is highly skilled with New Relic and provided valuable suggestions that greatly improved our project. His responsiveness and support whenever we needed help were outstanding. Highly recommended!&rdquo;</p>
+    <footer>— APM Tool Expert for SaaS Website, 75h engagement</footer>
+  </blockquote>
+
+  <blockquote>
+    <div class="stars">★★★★★ <span>5.0 rating</span></div>
+    <p>&ldquo;Andrei is exceptionally professional and possesses extensive knowledge in his field. The project was completed to a very high standard, and we highly recommend his services. Excellent work, Andrei!&rdquo;</p>
+    <footer>— New Relic Implementation client, 61h engagement</footer>
+  </blockquote>
+</section>
+
+<!-- ═══════════════ 9. FAQ ═══════════════ -->
+<section>
+  <h2>If you're wondering…</h2>
+
+  <details>
+    <summary>€850 seems like a lot for configuration work. What am I actually getting?</summary>
+    <div class="answer">
+      <p>Fair question. Let me break down what you're actually getting: APM agents configured per your stack, host monitoring, browser monitoring, Docker monitoring, synthetic checks (ping, page load, SSL), alert policies with sane thresholds, Slack/email delivery, Apache/Nginx/MySQL dashboards, plus a setup document (The Foundation Kit) you can hand to any future hire. That's 8+ New Relic features configured by someone who's been doing this since 2023. Most teams spend 2–3 weeks trial-and-erroring this, getting noisy alerts, and eventually ignoring them. You're paying to skip that.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Can you do it for less?</summary>
+    <div class="answer">
+      <p>The price is €850. It's one package, one price — Docker and everything else included. If budget is tight, I can split the payment: €425 now, €425 on delivery. But I don't strip features out. Every piece in the package is there because it matters in production.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Why you specifically? Anyone can install a New Relic agent.</summary>
+    <div class="answer">
+      <p>Installing the agent is 5 minutes. Knowing what to alert on, what thresholds make sense for your traffic patterns, and how to avoid alert fatigue — that's the part that takes experience. I've done this for SaaS companies, security companies, and my own production systems since 2023. I was responsible for New Relic monitoring at Warrant Hub S.p.A. and contributed to their ISO 27001 certification — so I understand monitoring through a compliance lens too. Most "just install the agent" setups generate 40+ alerts a day and get muted within a week. Mine don't.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>We already have Sentry / We use Datadog / We have Grafana.</summary>
+    <div class="answer">
+      <p>Then this package isn't for you — and that's fine. If you're happy with your current observability stack, there's nothing to fix. But if you're on a free tier that's not giving you real insight, or your current setup is noisy and nobody looks at it, that's where I come in.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>We can set this up ourselves.</summary>
+    <div class="answer">
+      <p>You probably can. The question is whether you <em>should</em>. Every hour your dev team spends configuring monitoring is an hour not shipping features. Most teams I work with could figure it out in 2–3 weeks of part-time tinkering. I do it in under a week, and you get a setup doc so when you hire your next dev, they don't have to reverse-engineer anything.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>What if we don't like the setup? What if you disappear?</summary>
+    <div class="answer">
+      <p>During the 14-day tuning window (included), we adjust. Wrong threshold? Too many alerts? We fix it. If after that you're genuinely unhappy — or if I get hit by a bus — the Foundation Kit means any competent DevOps engineer can pick up where I left off. Every alert, every threshold, every configuration decision is documented. You're never locked in.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Am I committing to anything ongoing?</summary>
+    <div class="answer">
+      <p>No. The €850 is one-shot. You get the configured account and The Foundation Kit. After that, you have two optional paths: a €200 one-time tuning pass over 2 weeks, or €250/mo if you want me to own it ongoing. Zero commitment beyond the initial setup.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Can you also build us custom dashboards for the CEO?</summary>
+    <div class="answer">
+      <p>Custom dashboards and NRQL queries aren't part of this package — it's a setup and alerting package, not a dashboard design service. If you need that, I'm happy to quote it separately at my standard rate (€65/hr). But honestly, once the data is in New Relic, building dashboards is drag-and-drop. The hard part is getting clean data in.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>We're on Kubernetes / AWS / Windows. Will this work?</summary>
+    <div class="answer">
+      <p>Then this package isn't the right fit. I specialize in Linux + Docker Compose setups with PHP and Node.js stacks. If you're on K8s or multi-cloud, I'm happy to refer you to someone who specializes in that, or we can talk about a custom engagement at my hourly rate. But I'd rather be upfront than take your money for something outside my sweet spot.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>We're not ready for this right now.</summary>
+    <div class="answer">
+      <p>That's fine — monitoring is one of those things that's never urgent until it is. The blog article I'm publishing in July covers a full New Relic setup for Laravel SaaS apps. If you want to DIY it, that'll give you a solid starting point. If you'd rather not, the package will still be here when you're ready.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Will this increase my New Relic bill?</summary>
+    <div class="answer">
+      <p>Full instrumentation generates more data than running bare agents. If you're on New Relic's free tier (100 GB/month), a properly instrumented app will likely exceed it. Before we start, I'll help you estimate your expected data volume and confirm your pricing tier makes sense. I don't control your NR bill — you do — but I'll make sure there are no surprises.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>What about GDPR and data sovereignty?</summary>
+    <div class="answer">
+      <p>I access your server directly via SSH. No data leaves your infrastructure during setup. Your New Relic account remains under your ownership and billing. All monitoring data stays within your NR account's configured region. You remain the data controller throughout.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ═══════════════ 10. LEAD MAGNET ═══════════════ -->
+<section id="freebie">
+  <h2>Not ready to buy? Take the free PDF.</h2>
+  <p>5 New Relic Alerts Every SaaS Should Have — a practical guide you can use today, whether or not you work with me.</p>
+
+  <div id="lead-form-wrap">
+  <form class="inline-form" action="https://grozavdev.mailcoach.app/subscribe/d3862d69-6025-4f70-bee4-81da8e338049" method="post">
+    <div style="position: absolute; left: -9999px">
+      <label for="website-username">Your username</label>
+      <input type="text" id="website-username" name="username" tabindex="-1" autocomplete="nope">
+    </div>
+    <input type="email" name="email" placeholder="you@yourcompany.com" required>
+    <button type="submit">Send me the PDF</button>
+  </form>
+  <p class="form-note">No spam. One email with the PDF, then a follow-up series. Unsubscribe anytime.</p>
+  </div>
+
+  <div id="lead-thanks" style="display:none;">
+    <div class="option">
+      <span class="opt-label">You're in.</span>
+      <p style="margin: 0;">Check your inbox — the PDF is on its way. If you don't see it within a few minutes, check your spam folder.</p>
+    </div>
+  </div>
+
+  <div id="lead-unsubscribed" style="display:none;">
+    <div class="option">
+      <span class="opt-label">Unsubscribed.</span>
+      <p style="margin: 0;">You've been removed from the list. No hard feelings — the page will still be here if you change your mind.</p>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- ═══════════════ 11. CTA — PRE-QUAL + STRIPE ═══════════════ -->
+<section id="cta">
+  <h2>Ready? Check your setup and check out.</h2>
+
+  <div class="prequal">
+    <div class="prequal-q" id="pq-host">
+      <span class="q-text">Linux host (Ubuntu/Debian/CentOS/Alpine)?</span>
+      <div class="q-btns">
+        <input type="radio" id="host-yes" name="host" value="yes">
+        <label for="host-yes" data-val="yes">Yes</label>
+        <input type="radio" id="host-no" name="host" value="no">
+        <label for="host-no" data-val="no">No</label>
+      </div>
+    </div>
+    <div class="disqualify-msg" id="msg-host">This package requires a Linux host. If you're on a different platform, I'm happy to refer you to someone who specializes in it.</div>
+
+    <div class="prequal-q" id="pq-stack">
+      <span class="q-text">PHP (Laravel) or Node.js backend?</span>
+      <div class="q-btns">
+        <input type="radio" id="stack-yes" name="stack" value="yes">
+        <label for="stack-yes" data-val="yes">Yes</label>
+        <input type="radio" id="stack-no" name="stack" value="no">
+        <label for="stack-no" data-val="no">No</label>
+      </div>
+    </div>
+    <div class="disqualify-msg" id="msg-stack">This package covers PHP (Laravel) and Node.js backends. For other stacks, a custom engagement may be possible — reach out directly.</div>
+
+    <div class="prequal-q" id="pq-nr">
+      <span class="q-text">Active New Relic account (or willing to create)?</span>
+      <div class="q-btns">
+        <input type="radio" id="nr-yes" name="nr" value="yes">
+        <label for="nr-yes" data-val="yes">Yes</label>
+        <input type="radio" id="nr-no" name="nr" value="no">
+        <label for="nr-no" data-val="no">No</label>
+      </div>
+    </div>
+    <div class="disqualify-msg" id="msg-nr">You'll need an active New Relic account. You can create one at newrelic.com — the free tier is enough to start.</div>
+
+    <div class="data-notice">
+      <span>⚠</span>
+      <span>Full monitoring generates billable data in New Relic. Make sure you understand your expected data ingest and pricing tier before purchasing.</span>
+    </div>
+  </div>
+
+  <div id="stripe-embed">
+    <a href="https://buy.stripe.com/3cIcN68A6f898Zq8eCg7e00" class="buy-btn">
+      Buy now — €850
+    </a>
+    <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.75rem;">
+      Secure payment via Stripe. You'll be redirected back after purchase.
+    </p>
+  </div>
+
+  <p class="stripe-reassurance">If your environment doesn't match what you indicated, full refund minus time spent at €65/hr. The Foundation Kit means you're never dependent on me.</p>
+</section>
+
+</div>
+
+<script>
+(function() {
+  var radios = document.querySelectorAll('.prequal input[type="radio"]');
+  var embed = document.getElementById('stripe-embed');
+  var msgs = {
+    host: document.getElementById('msg-host'),
+    stack: document.getElementById('msg-stack'),
+    nr: document.getElementById('msg-nr')
+  };
+
+  function update() {
+    var hostVal = (document.querySelector('input[name="host"]:checked') || {}).value;
+    var stackVal = (document.querySelector('input[name="stack"]:checked') || {}).value;
+    var nrVal = (document.querySelector('input[name="nr"]:checked') || {}).value;
+
+    msgs.host.style.display = (hostVal === 'no') ? 'block' : 'none';
+    msgs.stack.style.display = (stackVal === 'no') ? 'block' : 'none';
+    msgs.nr.style.display = (nrVal === 'no') ? 'block' : 'none';
+
+    if (hostVal === 'yes' && stackVal === 'yes' && nrVal === 'yes') {
+      embed.classList.add('visible');
+    } else {
+      embed.classList.remove('visible');
+    }
+  }
+
+  for (var i = 0; i < radios.length; i++) {
+    radios[i].addEventListener('change', update);
+  }
+
+  // initialize: hide all disqualify messages and embed
+  msgs.host.style.display = 'none';
+  msgs.stack.style.display = 'none';
+  msgs.nr.style.display = 'none';
+  embed.classList.remove('visible');
+})();
+
+// Handle Mailcoach redirect states and Stripe payment confirmation
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var formWrap = document.getElementById('lead-form-wrap');
+  var thanks = document.getElementById('lead-thanks');
+  var unsub = document.getElementById('lead-unsubscribed');
+  var section = document.getElementById('freebie');
+  var cta = document.getElementById('cta');
+
+  if (params.get('sub') === 'confirmed' && thanks) {
+    formWrap.style.display = 'none';
+    thanks.style.display = 'block';
+    setTimeout(function() { if (section) section.scrollIntoView({ behavior: 'smooth' }); }, 200);
+  }
+  if (params.get('sub') === 'unsubscribed' && unsub) {
+    formWrap.style.display = 'none';
+    unsub.style.display = 'block';
+    setTimeout(function() { if (section) section.scrollIntoView({ behavior: 'smooth' }); }, 200);
+  }
+  if (params.get('paid') === 'confirmed' && cta) {
+    // Replace pre-qual with a confirmation message
+    var prequal = document.querySelector('.prequal');
+    var embed = document.getElementById('stripe-embed');
+    if (prequal) prequal.style.display = 'none';
+    if (embed) {
+      embed.classList.add('visible');
+      embed.innerHTML = '<div class="option"><span class="opt-label">Payment received — thank you.</span><p style="margin: 0;">You\'ll hear from me within 24 hours to schedule the kickoff. Your official invoice will be generated manually and sent from andrei@danielpetrica.com — keep an eye on your inbox. In the meantime, gather your SSH details and any relevant config files. Looking forward to getting your monitoring set up.</p></div>';
+    }
+    setTimeout(function() { cta.scrollIntoView({ behavior: 'smooth' }); }, 200);
+  }
+})();
+</script>
+
+</body>
+</html>
