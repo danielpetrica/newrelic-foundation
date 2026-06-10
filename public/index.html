@@ -921,6 +921,13 @@ details .answer {
     </div>
   </div>
 
+  <div id="lead-pending" style="display:none;">
+    <div class="option">
+      <span class="opt-label">One more step — check your email.</span>
+      <p style="margin: 0;">To cut down on spam, we require double opt-in. Click the confirmation link in the email we just sent — once confirmed, the PDF lands in your inbox. Check spam if you don't see it within a few minutes.</p>
+    </div>
+  </div>
+
   <div id="lead-unsubscribed" style="display:none;">
     <div class="option">
       <span class="opt-label">Unsubscribed.</span>
@@ -1031,10 +1038,16 @@ details .answer {
   var params = new URLSearchParams(window.location.search);
   var formWrap = document.getElementById('lead-form-wrap');
   var thanks = document.getElementById('lead-thanks');
+  var pending = document.getElementById('lead-pending');
   var unsub = document.getElementById('lead-unsubscribed');
   var section = document.getElementById('freebie');
   var cta = document.getElementById('cta');
 
+  if (params.get('sub') === 'pending' && pending) {
+    formWrap.style.display = 'none';
+    pending.style.display = 'block';
+    setTimeout(function() { if (section) section.scrollIntoView({ behavior: 'smooth' }); }, 200);
+  }
   if (params.get('sub') === 'confirmed' && thanks) {
     formWrap.style.display = 'none';
     thanks.style.display = 'block';
@@ -1056,6 +1069,20 @@ details .answer {
     }
     setTimeout(function() { cta.scrollIntoView({ behavior: 'smooth' }); }, 200);
   }
+})();
+
+// Show pending confirmation state on form submit
+(function() {
+  var form = document.querySelector('#lead-form-wrap form');
+  if (!form) return;
+  form.addEventListener('submit', function() {
+    var formWrap = document.getElementById('lead-form-wrap');
+    var pending = document.getElementById('lead-pending');
+    var section = document.getElementById('freebie');
+    if (formWrap) formWrap.style.display = 'none';
+    if (pending) pending.style.display = 'block';
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
+  });
 })();
 </script>
 
